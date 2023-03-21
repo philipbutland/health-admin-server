@@ -3,7 +3,7 @@ const Appointment = require("../models/Appointment.model")
 const mongoose = require('mongoose')
 
 
-router.post('/appointments', (req,res,next)=> {
+router.post('/appointments/add-appointment', (req,res,next)=> {
     console.log("POST", req.body)
     const { doctor, patient, date, department } = req.body
     Appointment.create({ doctor, patient, date, department})
@@ -14,7 +14,7 @@ router.post('/appointments', (req,res,next)=> {
     .catch(error=>console.log(error))
 })
 
-router.get("/appointments/add-appointment",(req,res,next)=>{
+router.get("/appointments",(req,res,next)=>{
     console.log("GET")
     Appointment.find()
     .then(allAppointments=>{
