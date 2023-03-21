@@ -14,7 +14,7 @@ router.post('/appointments', (req,res,next)=> {
     .catch(error=>console.log(error))
 })
 
-router.get("/appointments",(req,res,next)=>{
+router.get("/appointments/add-appointment",(req,res,next)=>{
     console.log("GET")
     Appointment.find()
     .then(allAppointments=>{

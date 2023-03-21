@@ -3,7 +3,7 @@ const Patient = require("../models/Patient.model")
 const mongoose = require('mongoose')
 
 
-router.post('/patients', (req,res,next)=> {
+router.post('/patients/add-patient', (req,res,next)=> {
     console.log("POST", req.body)
     const { username, email, photo, dob, gender, bloodtype } = req.body
     Patient.create({username, email, photo, dob, gender, bloodtype})
