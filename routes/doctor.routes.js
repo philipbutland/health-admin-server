@@ -3,15 +3,19 @@ const Doctor = require("../models/Doctor.model")
 const mongoose = require('mongoose')
 
 router.post('/doctors/add-doctor', (req,res,next)=> {
-    console.log("POST", req.body)
     const { username, email, photo, price, department, gender } = req.body
     Doctor.create({username, email, photo, price, department, gender})
     .then(newDoctor=>{
         console.log("new Doctor", newDoctor);
         res.json(newDoctor)
     })
-    .catch(error=>console.log(error))
+    .catch(error=>{
+        console.log(error)
+        res.status(400).json(error)
+    })
 })
+
+
 
 router.get("/doctors",(req,res,next)=>{
     console.log("GET")
@@ -20,8 +24,10 @@ router.get("/doctors",(req,res,next)=>{
         console.log(allDoctors);
         res.json(allDoctors)
     })
-    .catch(error=>console.log(error))
-})
+    .catch(error=>{
+        console.log(error)
+        res.status(400).json(error)
+    })})
 
 router.get("/doctors/:doctorId", (req,res,next) => {
     const { doctorId } = req.params;
@@ -31,8 +37,11 @@ router.get("/doctors/:doctorId", (req,res,next) => {
     }
     Doctor.findById(doctorId)
     .then(oneDoctor=>{
-        console.log(oneDoctor)
         res.json(oneDoctor)
+    })
+    .catch(error=>{
+        console.log(error)
+        res.status(400).json(error)
     })
 })
 

@@ -14,15 +14,11 @@ const doctorSchema = new Schema(
       lowercase: true,
       trim: true,
     },
-
     photo: {
         type: String,
         trim: true,
         default: "../images/doctor.png",
     },
-    // dob: {
-    //     type: String
-    // },
     price: {
         type: Number
     },
@@ -30,15 +26,11 @@ const doctorSchema = new Schema(
          type: String
     },
     gender: {
-        type: [String],
+        type: String,
         enum: ["M", "F", "N/A"],
-    },
-    // bloodtype: {
-    //   type: String;
-    // }
+    }
   },
   {
-    // this second object adds extra properties: `createdAt` and `updatedAt`
     timestamps: true,
   }
 );
