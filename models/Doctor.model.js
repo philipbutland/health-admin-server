@@ -18,7 +18,6 @@ const doctorSchema = new Schema(
     photo: {
         type: String,
         trim: true,
-        default: "../images/doctor.png",
     },
     // dob: {
     //     type: String
