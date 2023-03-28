@@ -2,6 +2,23 @@ const router = require('express').Router()
 const Doctor = require("../models/Doctor.model")
 const mongoose = require('mongoose')
 
+const fileUploader = require("../config/cloudinary.config")
+
+router.post("/upload", fileUploader.single("photo"), (req, res, next) => {
+    console.log("file is: ", req.file)
+   
+    if (!req.file) {
+      next(new Error("No file uploaded!"));
+      return;
+    }
+    
+    // Get the URL of the uploaded file and send it as a response.
+    // 'fileUrl' can be any name, just make sure you remember to use the same when accessing it on the frontend
+    
+    res.json({ fileUrl: req.file.path });
+  });
+
+
 router.post('/doctors/add-doctor', (req,res,next)=> {
     const { username, email, photo, price, department, gender } = req.body
     Doctor.create({username, email, photo, price, department, gender})
@@ -14,8 +31,6 @@ router.post('/doctors/add-doctor', (req,res,next)=> {
         res.status(400).json(error)
     })
 })
-
-
 
 router.get("/doctors",(req,res,next)=>{
     console.log("GET")
