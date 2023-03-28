@@ -2,12 +2,14 @@ const { Schema, model } = require("mongoose");
 
 const appointmentSchema = new Schema(
   {
-    doctor: {type: Schema.Types.ObjectId, ref: "Doctor"},
-    patient: {type: Schema.Types.ObjectId, ref: "Patient"},
-    date: 
+    // doctorId: {type: Schema.Types.ObjectId, ref: "Doctor"},
+    // patientId: {type: Schema.Types.ObjectId, ref: "Patient"},
+    doctorId: { type: String, ref: "Doctor" },
+    patientId: { type: String, ref: "Patient"},
+    dateTime: 
     {
       type: String,
-      required: [true, "Please enter a date"],
+      required: [true, "Please enter a date and time"],
     },
     department: {
       type: String,

@@ -5,8 +5,8 @@ const mongoose = require('mongoose')
 
 router.post('/appointments/add-appointment', (req,res,next)=> {
     console.log("POST", req.body)
-    const { doctor, patient, date, department } = req.body
-    Appointment.create({ doctor, patient, date, department})
+    const { doctorId, patientId, dateTime, department } = req.body
+    Appointment.create({ doctorId, patientId, dateTime, department})
     .then(newAppointment=>{
         console.log("new Appointment", newAppointment)
         res.json(newAppointment)
