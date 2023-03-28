@@ -58,6 +58,7 @@ router.get("/doctors/:doctorId", (req, res, next) => {
     .catch((err) => {
       console.log(`error finding the doctor`, err);
     });
+
 });
 
 router.put("/doctors/:doctorId", (req, res, next) => {

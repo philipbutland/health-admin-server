@@ -5,11 +5,11 @@ const patientSchema = new Schema(
         username: {
             type: String,
             required: [true, "User name is required,"],
+            unique: true,
         },
         email: {
           type: String,
           required: [true, "Email is required."],
-          unique: true,
           lowercase: true,
           trim: true,
         },
@@ -20,18 +20,13 @@ const patientSchema = new Schema(
         dob: {
              type: String
         },
-        // price: {
-        //     type: Number
-        // },
-        // department: {
-        //     type: String
-        // },
         gender: {
             type: [String],
             enum: ["M", "F", "N/A"],
         },
-        bloodtype: {
-          type: String
+        bloodType: {
+          type: [String],
+          enum: ["A+", "A-", "B+", "B-", "O+", "O-", "AB+", "AB-"]
         }
       },
   {

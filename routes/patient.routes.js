@@ -5,13 +5,18 @@ const mongoose = require('mongoose')
 
 router.post('/patients/add-patient', (req,res,next)=> {
     console.log("req.body ", req.body)
-    const { username, email, photo, dob, gender, bloodtype } = req.body
-    Patient.create({username, email, photo, dob, gender, bloodtype})
+    const { username, email, photo, dob, gender, bloodType } = req.body
+    
+    Patient.create({username, email, photo, dob, gender, bloodType})
     .then(newPatient=>{
         console.log("new Patient", newPatient)
         res.json(newPatient)
     })
-    .catch(error=>console.log(error))
+    .catch(error=>{
+        if (error.code === 11000){
+            res.status(400).json( {message: "This user name is already being used. Please use a different name"})
+        }
+    })
 })
 
 router.get("/patients",(req,res,next)=>{
@@ -20,7 +25,10 @@ router.get("/patients",(req,res,next)=>{
     .then(allPatients=>{
         res.json(allPatients)
     })
-    .catch(error=>console.log(error))
+    .catch(error=>{
+        console.log(error)
+        res.status(400).json(error)
+    })
 })
 
 router.get("/patients/:patientId", (req,res,next) => {
@@ -33,6 +41,10 @@ router.get("/patients/:patientId", (req,res,next) => {
     .then(onePatient=>{
         console.log(onePatient)
         res.json(onePatient)
+    })
+    .catch(error=>{
+        console.log(error)
+        res.status(400).json(error)
     })
 })
 
