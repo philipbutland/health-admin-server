@@ -17,7 +17,6 @@ const doctorSchema = new Schema(
     photo: {
         type: String,
         trim: true,
-        default: "../images/doctor.png",
     },
     price: {
         type: Number
