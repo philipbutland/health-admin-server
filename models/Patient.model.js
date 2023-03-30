@@ -27,7 +27,10 @@ const patientSchema = new Schema(
         bloodType: {
           type: [String],
           enum: ["A+", "A-", "B+", "B-", "O+", "O-", "AB+", "AB-"]
-        }
+        },
+        appointment: [{
+          type: Schema.Types.ObjectId, ref:'Appointment'
+        }]
       },
   {
     // this second object adds extra properties: `createdAt` and `updatedAt`
