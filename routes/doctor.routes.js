@@ -2,6 +2,8 @@ const router = require("express").Router();
 const Doctor = require("../models/Doctor.model");
 const mongoose = require("mongoose");
 
+//https://res.cloudinary.com/darqf6mhi/image/upload/v1680024605/photo-gallery/evwibelnaka36y4gmgdf.jpg
+
 const fileUploader = require("../config/cloudinary.config")
 
 router.post("/upload", fileUploader.single("photo"), (req, res, next) => {
