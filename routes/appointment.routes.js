@@ -1,15 +1,23 @@
 const router = require('express').Router()
 const Appointment = require("../models/Appointment.model")
 const mongoose = require('mongoose')
+const Patient = require('../models/Patient.model')
 
 
 router.post('/appointments/add-appointment', (req,res,next)=> {
-    console.log("POST", req.body)
+    let globalAppointment
     const { doctorId, patientId, dateTime, department } = req.body
     Appointment.create({ doctorId, patientId, dateTime, department})
     .then(newAppointment=>{
-        console.log("new Appointment", newAppointment)
-        res.json(newAppointment)
+        globalAppointment=newAppointment
+        return Patient.findOne({username:patientId})
+    })
+    .then(patientInfo=>{
+        patientInfo.appointment.push(globalAppointment._id)
+        patientInfo.save()
+    })
+    .then(()=>{
+        res.json(globalAppointment)
     })
     .catch(error=>console.log(error))
 })
