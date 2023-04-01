@@ -30,7 +30,10 @@ const patientSchema = new Schema(
         },
         appointment: [{
           type: Schema.Types.ObjectId, ref:'Appointment'
-        }]
+        }],
+        // doctor: [{
+        //   type: Schema.Types.ObjectId, ref:'Doctor'
+        // }]
       },
   {
     // this second object adds extra properties: `createdAt` and `updatedAt`
