@@ -2,17 +2,11 @@ const { Schema, model } = require("mongoose");
 
 const appointmentSchema = new Schema(
   {
-    // doctorObject: {
-    //   type: Schema.Types.ObjectId, ref:'Doctor'
-    // },
-    // patientObject: {
-    //   type: Schema.Types.ObjectId, ref:'Patient'
-    // },
     doctorId: {
-      type: String,
-    },   
+      type: Schema.Types.ObjectId, ref:'Doctor'
+    },
     patientId: {
-      type: String,
+      type: Schema.Types.ObjectId, ref:'Patient'
     },
     dateTime: {
       type: String,

@@ -7,14 +7,11 @@ const Patient = require('../models/Patient.model')
 router.post('/appointments/add-appointment', (req,res,next)=> {
     let globalAppointment
     const { doctorId, patientId, dateTime, department } = req.body
+    console.log("req.body", req.body)
     Appointment.create({ doctorId, patientId, dateTime, department})
     .then(newAppointment=>{
         globalAppointment=newAppointment
-        return Patient.findOne({username:patientId})
-    })
-    .then(patientInfo=>{
-        patientInfo.appointment.push(globalAppointment._id)
-        patientInfo.save()
+        return Patient.findByIdAndUpdate(patientId,{$push:{appointment:globalAppointment._id}})
     })
     .then(()=>{
         res.json(globalAppointment)
@@ -25,6 +22,7 @@ router.post('/appointments/add-appointment', (req,res,next)=> {
 router.get("/appointments",(req,res,next)=>{
     console.log("GET")
     Appointment.find()
+    .populate("doctorId patientId")
     .then(allAppointments=>{
         res.json(allAppointments)
     })
@@ -38,6 +36,7 @@ router.get("/appointments/:appointmentId", (req,res,next) => {
         return;
     }
     Appointment.findById(appointmentId)
+    .populate("doctorId patientId")
     .then(oneAppointment=>{
         console.log(oneAppointment)
         res.json(oneAppointment)
