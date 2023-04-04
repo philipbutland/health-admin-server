@@ -4,8 +4,8 @@ const { Schema, model } = require("mongoose");
 const doctorSchema = new Schema(
   {
     username: {
-        type: String,
-        required: [true, "User name is required,"],
+      type: String,
+      required: [true, "User name is required,"],
     },
     email: {
       type: String,
@@ -14,20 +14,30 @@ const doctorSchema = new Schema(
       lowercase: true,
       trim: true,
     },
+    password: {
+      type: String,
+      required: [true, "Password is required."],
+    },
     photo: {
-        type: String,
-        trim: true,
+      type: String,
+      trim: true,
     },
     price: {
-        type: Number
+      type: Number,
     },
     department: {
-         type: String
+      type: String,
     },
     gender: {
         type: String,
         enum: ["M", "F", "N/A"],
-    }
+    },
+    // appointment: [{
+    //   type: Schema.Types.ObjectId, ref:'Appointment'
+    // }],
+    // patient: [{
+    //   type: Schema.Types.ObjectId, ref:'Doctor'
+    // }]
   },
   {
     timestamps: true,
