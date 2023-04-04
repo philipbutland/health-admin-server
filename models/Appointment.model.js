@@ -5,6 +5,9 @@ const appointmentSchema = new Schema(
     doctorId: {
       type: Schema.Types.ObjectId, ref:'Doctor'
     },
+    doctorName: {
+      type: String, ref:'DoctorName'   
+    },
     patientId: {
       type: Schema.Types.ObjectId, ref:'Patient'
     },

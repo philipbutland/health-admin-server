@@ -6,9 +6,9 @@ const Patient = require('../models/Patient.model')
 
 router.post('/appointments/add-appointment', (req,res,next)=> {
     let globalAppointment
-    const { doctorId, patientId, dateTime, department } = req.body
+    const { doctorId, doctorName, patientId, dateTime, department } = req.body
     console.log("req.body", req.body)
-    Appointment.create({ doctorId, patientId, dateTime, department})
+    Appointment.create({ doctorId, doctorName, patientId, dateTime, department})
     .then(newAppointment=>{
         globalAppointment=newAppointment
         return Patient.findByIdAndUpdate(patientId,{$push:{appointment:globalAppointment._id}})
