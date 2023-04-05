@@ -32,13 +32,7 @@ const doctorSchema = new Schema(
         type: String,
         enum: ["M", "F", "N/A"],
     },
-    // appointment: [{
-    //   type: Schema.Types.ObjectId, ref:'Appointment'
-    // }],
-    // patient: [{
-    //   type: Schema.Types.ObjectId, ref:'Doctor'
-    // }]
-  },
+   },
   {
     timestamps: true,
   }
