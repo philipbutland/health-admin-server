@@ -15,7 +15,7 @@ const adminSchema = new Schema(
     },
     username: {
       type: String,
-      required: [true, "Name is required."],
+      // required: [true, "Name is required."],
     },
   },
   {
