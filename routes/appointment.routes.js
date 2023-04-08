@@ -61,6 +61,7 @@ router.get("/appointments/patients/:patientId", (req, res, next) => {
   console.log(patientId)
   console.log("GET");
   Appointment.find({ patientId })
+  .populate("doctorId")
     .then((AppointmentsId) => {
       console.log(AppointmentsId)
       res.json(AppointmentsId);

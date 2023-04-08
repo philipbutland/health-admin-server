@@ -2,6 +2,9 @@ const router = require("express").Router();
 const Doctor = require("../models/Doctor.model");
 const mongoose = require("mongoose");
 const fileUploader = require("../config/cloudinary.config");
+const bcrypt = require("bcrypt");
+//const jwt = require("jsonwebtoken");
+const saltRounds = 10;
 
 router.post("/upload", fileUploader.single("photo"), (req, res, next) => {
   console.log("file is: ", req.file);
@@ -18,16 +21,76 @@ router.post("/upload", fileUploader.single("photo"), (req, res, next) => {
 });
 
 router.post("/doctors/add-doctor", (req, res, next) => {
-  const { username, email, photo, price, department, gender } = req.body;
-  Doctor.create({ username, email, photo, price, department, gender })
-    .then((newDoctor) => {
-      console.log("new Doctor", newDoctor);
-      res.json(newDoctor);
-    })
-    .catch((error) => {
-      console.log(error);
-      res.status(400).json(error);
+  const { username, email, photo, price, department, gender, password } =
+    req.body;
+  let role = "doctor";
+  console.log(email);
+  console.log(password);
+  console.log(role);
+  console.log(username);
+
+  // Check if email or password or name are provided as empty strings
+  if (email === "" || password === "") {
+    // if (email === "" || password === "" || !username) {
+    console.log("email", email, "password", password);
+    res.status(400).json({ message: "Provide email, password" });
+    return;
+  }
+
+  // This regular expression check that the email is of a valid format
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+  if (!emailRegex.test(email)) {
+    res.status(500).json({ message: "Provide a valid email address." });
+    return;
+  }
+
+  // This regular expression checks password for special characters and minimum length
+  const passwordRegex = /(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,}/;
+  if (!passwordRegex.test(password)) {
+    res.status(500).json({
+      message:
+        "Password must have at least 6 characters and contain at least one number, one lowercase and one uppercase letter.",
     });
+    return;
+  }
+
+  // Check the doctors collection if a doctor with the same email already exists
+  Doctor.findOne({ email })
+    .then((foundUser) => {
+      // If the doctor with the same email already exists, send an error response
+      if (foundUser) {
+        res.status(400).json({ message: "Doctor already exists." });
+        return;
+      }
+
+      // If email is unique, proceed to hash the password
+      const salt = bcrypt.genSaltSync(saltRounds);
+      const hashedPassword = bcrypt.hashSync(password, salt);
+
+      // Create the new doctor in the database
+      // We return a pending promise, which allows us to chain another `then`
+      return Doctor.create({
+        username,
+        email,
+        photo,
+        price,
+        department,
+        gender,
+        password: hashedPassword,
+      });
+    })
+    .then((createdDoctor) => {
+      // Deconstruct the newly created doctor object to omit the password
+      // We should never expose passwords publicly
+      const { email, _id, role } = createdDoctor;
+
+      // Create a new object that doesn't expose the password
+      const user = { email, _id, role };
+
+      // Send a json response containing the user object
+      res.status(201).json({ user: user });
+    })
+    .catch((err) => next(err));
 });
 
 router.get("/doctors", (req, res, next) => {
