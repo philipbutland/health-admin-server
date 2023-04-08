@@ -15,7 +15,7 @@ const patientSchema = new Schema(
     },
     password: {
       type: String,
-      required: [true, "Password is required."],
+      // required: [true, "Password is required."],
     },
     photo: {
       type: String,

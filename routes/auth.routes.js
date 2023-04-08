@@ -13,13 +13,15 @@ const saltRounds = 10;
 // POST /auth/signup  - Creates a new user in the database
 router.post("/signup", (req, res, next) => {
   const { email, password, role, username } = req.body;
-  console.log(email);
+  console.log("!!!", email);
   console.log(password);
   console.log(role);
   console.log(username);
 
   // Check if email or password or name are provided as empty strings
-  if (email === "" || password === "" || !username) {
+  if (email === "" || password === "") {
+  // if (email === "" || password === "" || !username) {
+    console.log("email", email, "password", password)
     res.status(400).json({ message: "Provide email, password" });
     return;
   }
@@ -75,8 +77,6 @@ router.post("/signup", (req, res, next) => {
 // POST  /auth/login - Verifies email and password and returns a JWT
 router.post("/login", (req, res, next) => {
   const { email, password } = req.body;
-  console.log(email);
-  console.log(password);
 
   // Check if email or password are provided as empty string
   if (email === "" || password === "") {
@@ -84,10 +84,13 @@ router.post("/login", (req, res, next) => {
     return;
   }
 
+  console.log("HERE")
+
   // Check the users collection if a user with the same email exists
   Patient.findOne({ email })
     .then((foundUser) => {
       if (foundUser) {
+        console.log("§§§", foundUser)
         // Compare the provided password with the one saved in the database
         const passwordCorrect = bcrypt.compareSync(
           password,
@@ -113,17 +116,21 @@ router.post("/login", (req, res, next) => {
             .json({ authToken: authToken, role: "patient", login: payload });
           return;
         } else {
+          console.log("!!!!!!!!!!!!!")
           res.status(401).json({ message: "Unable to authenticate the user" });
           return;
         }
       }
     })
-    .catch((err) => next(err)); // In this case, we send error handling to the error handling middleware.
+    .catch((err) => {
+      next(err)
+      console.log("ANyWHERE")
+    }); // In this case, we send error handling to the error handling middleware.
 
   Admin.findOne({ email })
     .then((foundUser) => {
       if (foundUser) {
-        console.log("foundAmin");
+        console.log("found");
 
         // Compare the provided password with the one saved in the database
         const passwordCorrect = bcrypt.compareSync(
@@ -154,7 +161,10 @@ router.post("/login", (req, res, next) => {
         }
       }
     })
-    .catch((err) => next(err)); // In this case, we send error handling to the error handling middleware.
+    .catch((err) => {
+      next(err); // In this case, we send error handling to the error handling middleware.
+      console.log("THERE")
+    });
 
   //res.status(401).json({ message: "User not found." });
 

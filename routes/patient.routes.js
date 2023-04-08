@@ -5,7 +5,7 @@ const mongoose = require("mongoose");
 const fileUploader = require("../config/cloudinary.config");
 
 router.post("/upload", fileUploader.single("photo"), (req, res, next) => {
-  console.log("file is: ", req.file);
+  // console.log("file is: ", req.file);
 
   if (!req.file) {
     next(new Error("No file uploaded!"));
@@ -19,12 +19,12 @@ router.post("/upload", fileUploader.single("photo"), (req, res, next) => {
 });
 
 router.post("/patients/add-patient", (req, res, next) => {
-  console.log("req.body ", req.body);
+  // console.log("req.body ", req.body);
   const { username, email, photo, dob, gender, bloodType } = req.body;
 
   Patient.create({ username, email, photo, dob, gender, bloodType })
     .then((newPatient) => {
-      console.log("new Patient", newPatient);
+      // console.log("new Patient", newPatient);
       res.json(newPatient);
     })
     .catch((error) => {
@@ -40,7 +40,7 @@ router.post("/patients/add-patient", (req, res, next) => {
 });
 
 router.get("/patients", (req, res, next) => {
-  console.log("GET");
+  // console.log("GET");
   Patient.find()
     .then((allPatients) => {
       res.json(allPatients);
@@ -61,7 +61,7 @@ router.get("/patients/:patientId", (req, res, next) => {
   Patient.findById(patientId)
     .populate("appointment")
     .then((onePatient) => {
-      console.log(onePatient);
+      // console.log(onePatient);
       res.json(onePatient);
     })
     .catch((error) => {
@@ -72,7 +72,7 @@ router.get("/patients/:patientId", (req, res, next) => {
 
 router.put("/patients/:patientId", (req, res, next) => {
   const { patientId } = req.params;
-  console.log("body", req.body);
+  // console.log("body", req.body);
   if (!mongoose.Types.ObjectId.isValid(patientId)) {
     res.status(400).json({ message: "Specified id is not valid" });
     return;
