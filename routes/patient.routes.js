@@ -70,6 +70,7 @@ router.get("/patients/:patientId", (req, res, next) => {
     });
 });
 
+
 router.put("/patients/:patientId", (req, res, next) => {
   const { patientId } = req.params;
   // console.log("body", req.body);
@@ -81,6 +82,8 @@ router.put("/patients/:patientId", (req, res, next) => {
     .then((updatedPatients) => res.json(updatedPatients))
     .catch((error) => res.status(400).json({ message: error }));
 });
+
+
 
 router.delete("/patients/:patientId", (req, res, next) => {
   const { patientId } = req.params;
