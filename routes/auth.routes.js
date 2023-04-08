@@ -4,6 +4,7 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const Admin = require("../models/Admin.model");
 const Patient = require("../models/Patient.model");
+const Doctor = require("../models/Doctor.model")
 const { isAuthenticated } = require("../middleware/jwt.middleware.js");
 
 // How many rounds should bcrypt run the salt (default - 10 rounds)
@@ -149,13 +150,51 @@ router.post("/login", (req, res, next) => {
             .json({ authToken: authToken, role: "admin", login: payload });
           return;
         } else {
-          res.status(401).json({ message: "Unable to authenticate the user" });
+          res.status(401).json({ message: "Unable to authenticate the admin" });
         }
       }
     })
     .catch((err) => next(err)); // In this case, we send error handling to the error handling middleware.
 
   //res.status(401).json({ message: "User not found." });
+
+ Doctor.findOne({ email })
+  .then((foundUser) => {
+    if (foundUser) {
+      console.log("foundDoct");
+
+      // Compare the provided password with the one saved in the database
+      const passwordCorrect = bcrypt.compareSync(
+        password,
+        foundUser.password
+      );
+
+      if (passwordCorrect) {
+        // Deconstruct the user object to omit the password
+        const { _id, email, username } = foundUser;
+
+        // Create an object that will be set as the token payload
+        const payload = { _id, email, username };
+
+        // Create a JSON Web Token and sign it
+        const authToken = jwt.sign(payload, process.env.TOKEN_SECRET, {
+          algorithm: "HS256",
+          expiresIn: "6h",
+        });
+
+        // Send the token as the response
+        res
+          .status(200)
+          .json({ authToken: authToken, role: "doctor", login: payload });
+        return;
+      } else {
+        res.status(401).json({ message: "Unable to authenticate the doctor" });
+      }
+    }
+  })
+  .catch((err) => next(err)); // In this case, we send error handling to the error handling middleware.
+
+//res.status(401).json({ message: "User not found." });
 
   return;
 });

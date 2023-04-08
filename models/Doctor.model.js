@@ -5,7 +5,7 @@ const doctorSchema = new Schema(
   {
     username: {
       type: String,
-      required: [true, "User name is required,"],
+      required: [true, "Doctor name is required,"],
     },
     email: {
       type: String,
@@ -16,7 +16,7 @@ const doctorSchema = new Schema(
     },
     password: {
       type: String,
-      required: [false, "Password is required."],
+      required: [true, "Password is required."],
     },
     photo: {
       type: String,

@@ -4,7 +4,7 @@ const patientSchema = new Schema(
   {
     username: {
       type: String,
-      required: [true, "User name is required,"],
+      required: [true, "Patient name is required,"],
       unique: true,
     },
     email: {

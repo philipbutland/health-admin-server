@@ -68,6 +68,18 @@ router.get("/appointments/patients/:patientId", (req, res, next) => {
     .catch((error) => console.log(error));
 });
 
+router.get("/appointments/doctors/:doctorId", (req, res, next) => {
+  const { doctorId } = req.params;
+  console.log(doctorId)
+  console.log("GET Doctor Appointments");
+  Appointment.find({ doctorId })
+    .then((AppointmentsId) => {
+      console.log(AppointmentsId)
+      res.json(AppointmentsId);
+    })
+    .catch((error) => console.log(error));
+});
+
 router.delete("/appointments/:appointmentId", (req, res, next) => {
   const { appointmentId } = req.params;
   if (!mongoose.Types.ObjectId.isValid(appointmentId)) {
