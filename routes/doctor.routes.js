@@ -7,7 +7,7 @@ const bcrypt = require("bcrypt");
 const saltRounds = 10;
 
 router.post("/upload", fileUploader.single("photo"), (req, res, next) => {
-  console.log("file is: ", req.file);
+  // console.log("file is: ", req.file);
 
   if (!req.file) {
     next(new Error("No file uploaded!"));
@@ -21,18 +21,13 @@ router.post("/upload", fileUploader.single("photo"), (req, res, next) => {
 });
 
 router.post("/doctors/add-doctor", (req, res, next) => {
-  const { username, email, photo, price, department, gender, password } =
-    req.body;
+  const { username, email, photo, price, department, gender, password } = req.body;
   let role = "doctor";
-  console.log(email);
-  console.log(password);
-  console.log(role);
-  console.log(username);
 
   // Check if email or password or name are provided as empty strings
   if (email === "" || password === "") {
     // if (email === "" || password === "" || !username) {
-    console.log("email", email, "password", password);
+    // console.log("email", email, "password", password);
     res.status(400).json({ message: "Provide email, password" });
     return;
   }
@@ -69,14 +64,7 @@ router.post("/doctors/add-doctor", (req, res, next) => {
 
       // Create the new doctor in the database
       // We return a pending promise, which allows us to chain another `then`
-      return Doctor.create({
-        username,
-        email,
-        photo,
-        price,
-        department,
-        gender,
-        password: hashedPassword,
+      return Doctor.create({username, email, photo, price, department, gender, password: hashedPassword,
       });
     })
     .then((createdDoctor) => {
@@ -94,10 +82,10 @@ router.post("/doctors/add-doctor", (req, res, next) => {
 });
 
 router.get("/doctors", (req, res, next) => {
-  console.log("GET");
+  // console.log("GET");
   Doctor.find()
     .then((allDoctors) => {
-      console.log(allDoctors);
+      console.log("ALLDOCTORS", allDoctors);
       res.json(allDoctors);
     })
     .catch((error) => {
@@ -124,7 +112,7 @@ router.get("/doctors/:doctorId", (req, res, next) => {
 //1
 router.put("/doctors/:doctorId", (req, res, next) => {
   const { doctorId } = req.params;
-  console.log("body", req.body);
+  // console.log("body", req.body);
   if (!mongoose.Types.ObjectId.isValid(doctorId)) {
     res.status(400).json({ message: "Specified id is not valid" });
     return;

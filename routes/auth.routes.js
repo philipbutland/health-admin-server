@@ -13,15 +13,10 @@ const saltRounds = 10;
 // POST /auth/signup  - Creates a new user in the database
 router.post("/signup", (req, res, next) => {
   const { email, password, role, username } = req.body;
-  console.log("!!!", email);
-  console.log(password);
-  console.log(role);
-  console.log(username);
 
   // Check if email or password or name are provided as empty strings
   if (email === "" || password === "") {
   // if (email === "" || password === "" || !username) {
-    console.log("email", email, "password", password)
     res.status(400).json({ message: "Provide email, password" });
     return;
   }
@@ -46,6 +41,7 @@ router.post("/signup", (req, res, next) => {
   // Check the users collection if a user with the same email already exists
   Patient.findOne({ email })
     .then((foundUser) => {
+      console.log("TTT", foundUser)
       // If the user with the same email already exists, send an error response
       if (foundUser) {
         res.status(400).json({ message: "User already exists." });
@@ -55,6 +51,8 @@ router.post("/signup", (req, res, next) => {
       // If email is unique, proceed to hash the password
       const salt = bcrypt.genSaltSync(saltRounds);
       const hashedPassword = bcrypt.hashSync(password, salt);
+
+      console.log("++++++++++++++++++++")
 
       // Create the new user in the database
       // We return a pending promise, which allows us to chain another `then`
@@ -78,24 +76,28 @@ router.post("/signup", (req, res, next) => {
 router.post("/login", (req, res, next) => {
   const { email, password } = req.body;
 
+  console.log("email", email, "password", password)
+
   // Check if email or password are provided as empty string
   if (email === "" || password === "") {
     res.status(400).json({ message: "Provide email and password." });
     return;
   }
 
-  console.log("HERE")
-
   // Check the users collection if a user with the same email exists
   Patient.findOne({ email })
     .then((foundUser) => {
       if (foundUser) {
-        console.log("§§§", foundUser)
         // Compare the provided password with the one saved in the database
+        console.log("^^", password, foundUser.password)
+
         const passwordCorrect = bcrypt.compareSync(
           password,
           foundUser.password
         );
+
+        console.log("!!", password, foundUser.password, passwordCorrect)
+
 
         if (passwordCorrect) {
           // Deconstruct the user object to omit the password
@@ -124,19 +126,27 @@ router.post("/login", (req, res, next) => {
     })
     .catch((err) => {
       next(err)
-      console.log("ANyWHERE")
+      // console.log("ANyWHERE")
     }); // In this case, we send error handling to the error handling middleware.
 
   Admin.findOne({ email })
     .then((foundUser) => {
       if (foundUser) {
-        console.log("found");
+        console.log("AA§", foundUser)
+
+        // console.log("found");
 
         // Compare the provided password with the one saved in the database
+
+        console.log("AA^", password, foundUser.password)
+
         const passwordCorrect = bcrypt.compareSync(
           password,
           foundUser.password
         );
+
+        console.log("AA!", password, foundUser.password, passwordCorrect)
+
 
         if (passwordCorrect) {
           // Deconstruct the user object to omit the password
@@ -171,13 +181,18 @@ router.post("/login", (req, res, next) => {
  Doctor.findOne({ email })
   .then((foundUser) => {
     if (foundUser) {
-      console.log("foundDoct");
+      console.log("DD§", foundUser)
 
       // Compare the provided password with the one saved in the database
+
+      console.log("DD^", password, foundUser.password)
+
       const passwordCorrect = bcrypt.compareSync(
         password,
         foundUser.password
       );
+
+      console.log("DD!", password, foundUser.password, passwordCorrect)
 
       if (passwordCorrect) {
         // Deconstruct the user object to omit the password
@@ -213,7 +228,7 @@ router.post("/login", (req, res, next) => {
 router.get("/verify", isAuthenticated, (req, res, next) => {
   // If JWT token is valid the payload gets decoded by the
   // isAuthenticated middleware and is made available on `req.payload`
-  console.log(`req.payload`, req.payload);
+  // console.log(`req.payload`, req.payload);
 
   // Send back the token payload object containing the user data
   res.status(200).json(req.payload);

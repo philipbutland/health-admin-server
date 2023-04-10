@@ -7,7 +7,7 @@ const Patient = require("../models/Patient.model");
 router.post('/appointments/add-appointment', (req,res,next)=> {
     let globalAppointment
     const { doctorId, doctorName, patientId, dateTime, department } = req.body
-    console.log("req.body", req.body)
+    // console.log("req.body", req.body)
     Appointment.create({ doctorId, doctorName, patientId, dateTime, department})
     .then(newAppointment=>{
         globalAppointment=newAppointment
@@ -21,7 +21,7 @@ router.post('/appointments/add-appointment', (req,res,next)=> {
 })
 
 router.get("/appointments",(req,res,next)=>{
-    console.log("GET")
+    // console.log("GET")
     Appointment.find()
     .populate("doctorId patientId")
     .then(allAppointments=>{
@@ -39,7 +39,7 @@ router.get("/appointments/:appointmentId", (req,res,next) => {
     Appointment.findById(appointmentId)
     .populate("doctorId patientId")
     .then(oneAppointment=>{
-        console.log(oneAppointment)
+        // console.log(oneAppointment)
         res.json(oneAppointment)
     })
 })
@@ -58,12 +58,12 @@ router.put("/appointments/:appointmentId", (req,res,next) => {
 
 router.get("/appointments/patients/:patientId", (req, res, next) => {
   const { patientId } = req.params;
-  console.log(patientId)
-  console.log("GET");
+  // console.log(patientId)
+  // console.log("GET");
   Appointment.find({ patientId })
   .populate("doctorId")
     .then((AppointmentsId) => {
-      console.log(AppointmentsId)
+      // console.log(AppointmentsId)
       res.json(AppointmentsId);
     })
     .catch((error) => console.log(error));
@@ -71,11 +71,11 @@ router.get("/appointments/patients/:patientId", (req, res, next) => {
 
 router.get("/appointments/doctors/:doctorId", (req, res, next) => {
   const { doctorId } = req.params;
-  console.log(doctorId)
-  console.log("GET Doctor Appointments");
+  // console.log(doctorId)
+  // console.log("GET Doctor Appointments");
   Appointment.find({ doctorId })
     .then((AppointmentsId) => {
-      console.log(AppointmentsId)
+      // console.log(AppointmentsId)
       res.json(AppointmentsId);
     })
     .catch((error) => console.log(error));

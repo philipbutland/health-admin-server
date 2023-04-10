@@ -1,8 +1,9 @@
 const router = require("express").Router();
 const Patient = require("../models/Patient.model");
 const mongoose = require("mongoose");
-
 const fileUploader = require("../config/cloudinary.config");
+const bcrypt = require("bcrypt");
+const saltRounds = 10;
 
 router.post("/upload", fileUploader.single("photo"), (req, res, next) => {
   // console.log("file is: ", req.file);
@@ -19,31 +20,71 @@ router.post("/upload", fileUploader.single("photo"), (req, res, next) => {
 });
 
 router.post("/patients/add-patient", (req, res, next) => {
-  // console.log("req.body ", req.body);
-  const { username, email, photo, dob, gender, bloodType } = req.body;
+  const { username, email, password, photo, dob, gender, bloodType } = req.body;
 
-  Patient.create({ username, email, photo, dob, gender, bloodType })
-    .then((newPatient) => {
-      // console.log("new Patient", newPatient);
-      res.json(newPatient);
-    })
-    .catch((error) => {
-      if (error.code === 11000) {
-        res
-          .status(400)
-          .json({
-            message:
-              "This user name is already being used. Please use a different name",
-          });
+  let role = "patient";
+
+  if (email === "" || password === "") {
+    res.status(400).json({ message: "Provide email, password" });
+    return;
+  }
+
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+  if (!emailRegex.test(email)) {
+    res.status(500).json({ message: "Provide a valid email address." });
+    return;
+  }
+
+  const passwordRegex = /(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,}/;
+  if (!passwordRegex.test(password)) {
+    res.status(500).json({message: "Password must have at least 6 characters and contain at least one number, one lowercase and one uppercase letter."});
+    return;
+  }
+
+  Patient.findOne({ email })
+    .then((foundUser) => {
+      if (foundUser) {
+        res.status(400).json({ message: "Patient already exists." });
+        return;
       }
-    });
+
+      const salt = bcrypt.genSaltSync(saltRounds);
+      const hashedPassword = bcrypt.hashSync(password, salt);
+
+      return Patient.create({username, email, photo, dob, gender, bloodType, password: hashedPassword,
+      });
+    })
+    .then((createdPatient) => {
+      const { email, _id, role } = createdPatient;
+      const user = { email, _id, role };
+      res.status(201).json({ user: user });
+    })
+    .catch((err) => next(err));
 });
+
+
+
+
+//   Patient.create({ username, email, password, photo, dob, gender, bloodType })
+//     .then((newPatient) => {
+//       // console.log("new Patient", newPatient);
+//       res.json(newPatient);
+//     })
+//     .catch((error) => {
+//       if (error.code === 11000) {
+//         res
+//           .status(400).json({message: "This user name is already being used. Please use a different name",
+//           });
+//       }
+//     });
+// });
 
 router.get("/patients", (req, res, next) => {
   // console.log("GET");
   Patient.find()
     .then((allPatients) => {
       res.json(allPatients);
+      console.log("ALLPATIENTS", allPatients)
     })
     .catch((error) => {
       console.log(error);
