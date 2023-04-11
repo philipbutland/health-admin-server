@@ -3,6 +3,7 @@ const Doctor = require("../models/Doctor.model");
 const mongoose = require("mongoose");
 const fileUploader = require("../config/cloudinary.config");
 const bcrypt = require("bcrypt");
+const Appointment = require("../models/Appointment.model");
 //const jwt = require("jsonwebtoken");
 const saltRounds = 10;
 
@@ -122,13 +123,11 @@ router.put("/doctors/:doctorId", (req, res, next) => {
     .catch((error) => res.status(400).json({ message: error }));
 });
 
-router.delete("/doctors/:doctorId", (req, res, next) => {
+router.delete("/doctors/:doctorId", async(req, res, next) => {
   const { doctorId } = req.params;
-  Doctor.findByIdAndDelete(doctorId)
-    .then((response) => {
-      res.json(response);
-    })
-    .catch((error) => res.status(400).json({ message: error }));
+  await Doctor.findByIdAndDelete(doctorId)
+  const deletedAppointment= await  Appointment.deleteMany({doctorId:doctorId})
+  res.json(deletedAppointment)
 });
 
 module.exports = router;
