@@ -61,7 +61,7 @@ router.get("/appointments/patients/:patientId", (req, res, next) => {
   // console.log(patientId)
   // console.log("GET");
   Appointment.find({ patientId })
-  .populate("doctorId")
+  .populate("doctorId patientId")
     .then((AppointmentsId) => {
       // console.log(AppointmentsId)
       res.json(AppointmentsId);
@@ -74,6 +74,7 @@ router.get("/appointments/doctors/:doctorId", (req, res, next) => {
   // console.log(doctorId)
   // console.log("GET Doctor Appointments");
   Appointment.find({ doctorId })
+  .populate("doctorId patientId")
     .then((AppointmentsId) => {
       // console.log(AppointmentsId)
       res.json(AppointmentsId);
