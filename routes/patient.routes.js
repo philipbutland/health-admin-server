@@ -22,6 +22,8 @@ router.post("/upload", fileUploader.single("photo"), (req, res, next) => {
 router.post("/patients/add-patient", (req, res, next) => {
   const { username, email, password, photo, dob, gender, bloodType } = req.body;
 
+  console.log("req.body", req.body)
+
   let role = "patient";
 
   if (email === "" || password === "") {
@@ -30,6 +32,8 @@ router.post("/patients/add-patient", (req, res, next) => {
   }
 
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+  console.log("&&&&&& email ", email, emailRegex)
+
   if (!emailRegex.test(email)) {
     res.status(500).json({ message: "Provide a valid email address." });
     return;
