@@ -34,7 +34,7 @@ router.get("/appointments/:appointmentId", (req,res,next) => {
         return;
     }
     Appointment.findById(appointmentId)
-    .populate("doctorId patientId")
+    .populate("doctorId patientId department")
     .then(oneAppointment=>{
         res.json(oneAppointment)
     })
