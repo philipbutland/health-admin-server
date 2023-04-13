@@ -3,6 +3,8 @@ const Patient = require("../models/Patient.model");
 const mongoose = require("mongoose");
 const fileUploader = require("../config/cloudinary.config");
 const bcrypt = require("bcrypt");
+const Appointment = require("../models/Appointment.model");
+
 const saltRounds = 10;
 
 router.post("/upload", fileUploader.single("photo"), (req, res, next) => {
@@ -128,15 +130,13 @@ router.put("/patients/:patientId", (req, res, next) => {
     .catch((error) => res.status(400).json({ message: error }));
 });
 
-
-
-router.delete("/patients/:patientId", (req, res, next) => {
+router.delete("/patients/:patientId", async(req, res, next) => {
   const { patientId } = req.params;
-  Patient.findByIdAndDelete(patientId)
-    .then((response) => {
-      res.json(response);
-    })
-    .catch((error) => res.status(400).json({ message: error }));
+  await Patient.findByIdAndDelete(patientId)
+  const deletedAppointment= await  Appointment.deleteMany({patientId:patientId})
+  res.json(deletedAppointment)
 });
+
+
 
 module.exports = router;
