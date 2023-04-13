@@ -85,7 +85,7 @@ router.get("/doctors", (req, res, next) => {
   // console.log("GET");
   Doctor.find()
     .then((allDoctors) => {
-      console.log("ALLDOCTORS", allDoctors);
+      console.log("ALL DOCTORS", allDoctors);
       res.json(allDoctors);
     })
     .catch((error) => {
