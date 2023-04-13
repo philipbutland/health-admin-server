@@ -8,7 +8,6 @@ const Appointment = require("../models/Appointment.model");
 const saltRounds = 10;
 
 router.post("/upload", fileUploader.single("photo"), (req, res, next) => {
-  // console.log("file is: ", req.file);
 
   if (!req.file) {
     next(new Error("No file uploaded!"));
@@ -27,8 +26,6 @@ router.post("/doctors/add-doctor", (req, res, next) => {
 
   // Check if email or password or name are provided as empty strings
   if (email === "" || password === "") {
-    // if (email === "" || password === "" || !username) {
-    // console.log("email", email, "password", password);
     res.status(400).json({ message: "Provide email, password" });
     return;
   }
@@ -83,10 +80,8 @@ router.post("/doctors/add-doctor", (req, res, next) => {
 });
 
 router.get("/doctors", (req, res, next) => {
-  // console.log("GET");
   Doctor.find()
     .then((allDoctors) => {
-      console.log("ALL DOCTORS", allDoctors);
       res.json(allDoctors);
     })
     .catch((error) => {
@@ -113,7 +108,6 @@ router.get("/doctors/:doctorId", (req, res, next) => {
 //1
 router.put("/doctors/:doctorId", (req, res, next) => {
   const { doctorId } = req.params;
-  // console.log("body", req.body);
   if (!mongoose.Types.ObjectId.isValid(doctorId)) {
     res.status(400).json({ message: "Specified id is not valid" });
     return;

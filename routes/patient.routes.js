@@ -8,7 +8,6 @@ const Appointment = require("../models/Appointment.model");
 const saltRounds = 10;
 
 router.post("/upload", fileUploader.single("photo"), (req, res, next) => {
-  // console.log("file is: ", req.file);
 
   if (!req.file) {
     next(new Error("No file uploaded!"));
@@ -24,8 +23,6 @@ router.post("/upload", fileUploader.single("photo"), (req, res, next) => {
 router.post("/patients/add-patient", (req, res, next) => {
   const { username, email, password, photo, dob, gender, bloodType } = req.body;
 
-  console.log("req.body", req.body)
-
   let role = "patient";
 
   if (email === "" || password === "") {
@@ -34,7 +31,6 @@ router.post("/patients/add-patient", (req, res, next) => {
   }
 
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
-  console.log("&&&&&& email ", email, emailRegex)
 
   if (!emailRegex.test(email)) {
     res.status(500).json({ message: "Provide a valid email address." });
@@ -69,28 +65,10 @@ router.post("/patients/add-patient", (req, res, next) => {
 });
 
 
-
-
-//   Patient.create({ username, email, password, photo, dob, gender, bloodType })
-//     .then((newPatient) => {
-//       // console.log("new Patient", newPatient);
-//       res.json(newPatient);
-//     })
-//     .catch((error) => {
-//       if (error.code === 11000) {
-//         res
-//           .status(400).json({message: "This user name is already being used. Please use a different name",
-//           });
-//       }
-//     });
-// });
-
 router.get("/patients", (req, res, next) => {
-  // console.log("GET");
   Patient.find()
     .then((allPatients) => {
       res.json(allPatients);
-      console.log("ALLPATIENTS", allPatients)
     })
     .catch((error) => {
       console.log(error);
@@ -108,7 +86,6 @@ router.get("/patients/:patientId", (req, res, next) => {
   Patient.findById(patientId)
     .populate("appointment")
     .then((onePatient) => {
-      // console.log(onePatient);
       res.json(onePatient);
     })
     .catch((error) => {
@@ -120,7 +97,6 @@ router.get("/patients/:patientId", (req, res, next) => {
 
 router.put("/patients/:patientId", (req, res, next) => {
   const { patientId } = req.params;
-  // console.log("body", req.body);
   if (!mongoose.Types.ObjectId.isValid(patientId)) {
     res.status(400).json({ message: "Specified id is not valid" });
     return;

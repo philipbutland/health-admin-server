@@ -7,11 +7,9 @@ const Patient = require("../models/Patient.model");
 router.post('/appointments/add-appointment', (req,res,next)=> {
     let globalAppointment
     const { doctorId, doctorName, patientId, dateTime, department } = req.body
-    // console.log("req.body", req.body)
     Appointment.create({ doctorId, doctorName, patientId, dateTime, department})
     .then(newAppointment=>{
         globalAppointment=newAppointment
-        //verify this code!
         return Patient.findByIdAndUpdate( patientId,{$push:{appointment:globalAppointment._id}})
     })
     .then(() => {
@@ -21,7 +19,6 @@ router.post('/appointments/add-appointment', (req,res,next)=> {
 })
 
 router.get("/appointments",(req,res,next)=>{
-    // console.log("GET")
     Appointment.find()
     .populate("doctorId patientId")
     .then(allAppointments=>{
@@ -39,14 +36,12 @@ router.get("/appointments/:appointmentId", (req,res,next) => {
     Appointment.findById(appointmentId)
     .populate("doctorId patientId")
     .then(oneAppointment=>{
-        // console.log(oneAppointment)
         res.json(oneAppointment)
     })
 })
 
 router.put("/appointments/:appointmentId", (req,res,next) => {
     const { appointmentId } = req.params;
-    console.log ("body", req.body)
     if (!mongoose.Types.ObjectId.isValid(appointmentId)) {
         res.status(400).json( {message: "Specified id is not valid"});
         return;
@@ -58,12 +53,9 @@ router.put("/appointments/:appointmentId", (req,res,next) => {
 
 router.get("/appointments/patients/:patientId", (req, res, next) => {
   const { patientId } = req.params;
-  // console.log(patientId)
-  // console.log("GET");
   Appointment.find({ patientId })
   .populate("doctorId patientId")
     .then((AppointmentsId) => {
-      // console.log(AppointmentsId)
       res.json(AppointmentsId);
     })
     .catch((error) => console.log(error));
@@ -71,12 +63,9 @@ router.get("/appointments/patients/:patientId", (req, res, next) => {
 
 router.get("/appointments/doctors/:doctorId", (req, res, next) => {
   const { doctorId } = req.params;
-  // console.log(doctorId)
-  // console.log("GET Doctor Appointments");
   Appointment.find({ doctorId})
   .populate("doctorId patientId")
     .then((AppointmentsId) => {
-      // console.log(AppointmentsId)
       res.json(AppointmentsId);
     })
     .catch((error) => console.log(error));
