@@ -105,7 +105,7 @@ router.get("/doctors/:doctorId", (req, res, next) => {
       res.status(400).json(error, `error finding the doctor`);
     });
 });
-//1
+
 router.put("/doctors/:doctorId", (req, res, next) => {
   const { doctorId } = req.params;
   if (!mongoose.Types.ObjectId.isValid(doctorId)) {
