@@ -87,8 +87,6 @@
     * DELETE /patients/:patientId
         validates :patientId then deletes this patient
 
-
-
-Miro https://miro.com/app/board/uXjVMcWdAuU=/
-Github https://github.com/philipbutland/health-admin-client
-Presentation https://docs.google.com/presentation/d/1DaUd0SUFgsfSXEORaM57-M0A0etiBNJMifn9MpsDFPo/edit#slide=id.p
+* Miro https://miro.com/app/board/uXjVMcWdAuU=/
+* Github https://github.com/philipbutland/health-admin-client
+* Presentation https://docs.google.com/presentation/d/1DaUd0SUFgsfSXEORaM57-M0A0etiBNJMifn9MpsDFPo/edit#slide=id.p
